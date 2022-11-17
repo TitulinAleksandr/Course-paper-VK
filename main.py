@@ -7,13 +7,13 @@ from vk_class import VK
 if __name__ == '__main__':
     with open('vktoken.txt', 'r') as file:
         token = file.read().strip()
-    user_id = '546799374'
+    user_id = str(input('Введите ID профиля ВКонтаке: '))
     vk = VK(user_id, token)
     photos = vk.photos_list()
     
-    with open('tokenya.txt', 'r') as file:
-        token = file.read().strip()
-    vasya = YandexDisk(token)
+    # with open('tokenya.txt', 'r') as file:
+    #     token = file.read().strip()
+    vasya = YandexDisk(input('Введите токен с Полигона Яндекс.Диска:\n'))
     vasya.create_folder(user_id)
     list_for_json = [] # Список для записи в json-файл
     for photo in tqdm(photos):

@@ -9,6 +9,19 @@ class VK:
         photos_get_url = self.url + 'photos.get'
         photos_get_params = {'album_id': 'profile', 'extended': '1', 'photo_sizes': True}
         response = requests.get(photos_get_url, params={**self.params, **photos_get_params}).json()
+        print(f"В заданом профиле содержится {len(response['response']['items'])} фотографий.\nПо умолчанию будет загружено 5 штук.\nЖелаете загрузить другое количество? Да/Нет")
+        user_input = input().lower()
+        if user_input == 'нет':
+            param = {'count': '5'}
+            photos_get_params.update(param)
+            response = requests.get(photos_get_url, params={**self.params, **photos_get_params}).json()
+        elif user_input == 'да':
+            get_number_photo = str(input(f'Введите количество фотографий для загрузки: '))
+            param = {'count': get_number_photo}
+            photos_get_params.update(param)
+            response = requests.get(photos_get_url, params={**self.params, **photos_get_params}).json()
+        else:
+            print('Введите корректные данные.')
         return response
     
     def _max_size(self, size_dict): # Определяем максимальный размер

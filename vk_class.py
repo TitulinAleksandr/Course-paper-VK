@@ -12,16 +12,13 @@ class VK:
             
     def get_user_id (self):
         get_url = self.url + 'utils.resolveScreenName'        
-        
         print('Вы знаете screen_name пользователя ВКонтакте: да/нет?')
         user_input = input().lower()
-        
         if user_input == 'да':
             screen_name = input(str('Введите screen_name пользователя ВКонтакте:\n'))
             get_params = {'screen_name': screen_name}
             response = requests.get(get_url, params={**self.params, **get_params}).json()
             return response['response']['object_id']
-
         else:
             user_id = input('Введите ID пользователя ВКонтакте:\n')
             return user_id

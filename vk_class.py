@@ -7,14 +7,31 @@ class VK:
     
     url = 'https://api.vk.com/method/'
     
-    def __init__(self, user_id, token, version=5.131):
-        self.params = {'owner_id': user_id, 'access_token': token, 'v': version}
-    
-    def photos_get(self):
+    def __init__(self, token, version=5.131):
+        self.params = {'access_token': token, 'v': version}
+            
+    def get_user_id (self):
+        get_url = self.url + 'utils.resolveScreenName'        
+        
+        print('Вы знаете screen_name пользователя ВКонтакте: да/нет?')
+        user_input = input().lower()
+        
+        if user_input == 'да':
+            screen_name = input(str('Введите screen_name пользователя ВКонтакте:\n'))
+            get_params = {'screen_name': screen_name}
+            response = requests.get(get_url, params={**self.params, **get_params}).json()
+            return response['response']['object_id']
+
+        else:
+            user_id = input('Введите ID пользователя ВКонтакте:\n')
+            return user_id
+
+    def photos_get(self, user_id):
         get_url = self.url + 'photos.get'
-        get_params = {'album_id': 'profile', 'extended': '1', 'photo_sizes': True}
-        respons = requests.get(get_url, params={**self.params, **get_params}).json()
-        print('В заданом профиле содержится', len(respons['response']['items']),
+        get_params = {'owner_id': user_id, 'album_id': 'profile',
+                      'extended': '1', 'photo_sizes': True}
+        response = requests.get(get_url, params={**self.params, **get_params}).json()
+        print('В заданом профиле содержится', len(response['response']['items']),
               'фотографий.\n'
               'По умолчанию будет загружено 5 штук.\n'
               'Желаете загрузить другое количество? Да/Нет'
@@ -45,11 +62,11 @@ class VK:
     def _strftime(self, timestamp, format_string='%Y-%m-%d'):
         return time.strftime(format_string, time.localtime(timestamp))
     
-    def photos_list(self):
+    def photos_list(self, user_id):
         self.photos_list = []
         self.json_list = []
         self.count_list = []
-        photos = self.photos_get()['response']['items']  
+        photos = self.photos_get(user_id)['response']['items']  
         
         '''A loop for creating a list of received data from the VK service,
            sorted (maximum size, date, url) for further processing'''

@@ -9,10 +9,10 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read("settings.ini")
     token = config['vk_token']['vktoken']
-    user_id = str(input('Введите ID профиля ВКонтаке: '))
-    
-    vk = VK(user_id, token)
-    data = vk.photos_list()
+        
+    vk = VK(token)
+    user_id = vk.get_user_id()
+    data = vk.photos_list(user_id)
     
     user = YandexDisk(input('Введите токен с Полигона Яндекс.Диска:\n'))
     user.create_folder(user_id)
